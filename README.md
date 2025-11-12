@@ -1,91 +1,192 @@
+# iCalligraphy - 智能书法学习平台
 
-# iCalligraphy草稿
+基于 Flask + SQLAlchemy + SQLite 的智能书法学习平台，前后端一体化部署。
 
-## 一、产品概述
+## 功能特性
 
-书法交流平台旨在为书法爱好者提供一个展示、学习与收藏书法作品的互动空间。平台支持作品上传、单字信息展示、个性化字集收藏与分类管理等核心功能。
+- 用户注册、登录（JWT 认证）
+- 书法作品上传、浏览、搜索
+- 作品点赞、收藏
+- 评论、回复功能
+- 个人主页、作品管理
+- 社区交流
+- 审核中心
 
----
+## 技术栈
 
-## 二、核心功能模块
+### 后端
+- Flask 3.0.0（Web 框架）
+- SQLAlchemy 2.0.23（ORM）
+- SQLite（数据库）
+- Flask-JWT-Extended（JWT 认证）
+- Flask-CORS（跨域支持）
 
-### 1. 作品展示模块
+### 前端
+- HTML5 + CSS3 + JavaScript
+- 响应式设计
 
-* 功能描述：
+## 快速开始
 
-  平台展示用户上传或系统收录的书法作品。
-* 关键功能：
+### 一键启动（推荐）
 
-  * 每个作品被划分为若干个格子（每格对应一个汉字）。
-  * 用户将鼠标移动到任意格子上时，显示该字的详细信息。
-  * 支持作品放大、缩小与拖拽浏览。 **这里老师没提及，可作锦上添花**
-* 单字信息展示内容：
+#### Windows
+双击运行 `start.bat`，或在命令行中：
+```bash
+start.bat
+```
 
-  * 字形图片（单字切片）
-  * 作者姓名
-  * 风格（如楷书、行书、草书等）
-  * 所属作品名称
-  * 收藏按钮（添加到个人字集）
+#### Linux/Mac
+```bash
+chmod +x start.sh
+./start.sh
+```
 
----
+启动脚本会自动：
+1. 检查并安装依赖
+2. 初始化数据库（如果不存在）
+3. 启动服务
 
-### 2. 单字收藏与字集模块
+启动成功后访问：**http://localhost:5000**
 
-* 功能描述：
+### 手动启动
 
-  用户可以将喜欢的单字收藏到个人字集，并进行分类管理。
-* 关键功能：
+#### 1. 安装依赖
+```bash
+cd Backend
+pip install -r requirements.txt
+```
 
-  * 点击“收藏”可将该字加入用户字集。
-  * 字集支持按照以下维度分类与筛选：
+#### 2. 配置环境变量（可选）
+```bash
+cp Backend/.env.example Backend/.env
+# 编辑 .env 文件修改配置
+```
 
-    * 作者
-    * 风格
-    * 作品来源
+#### 3. 初始化数据库
+```bash
+cd Backend
+python init_db.py
+```
 
----
+这将创建测试账号：
+- 管理员：`admin` / `admin123`
+- 测试用户：`testuser` / `test123`
 
-### 3. 用户作品提交模块
+#### 4. 启动服务
+```bash
+cd Backend
+python app.py
+```
 
-* 功能描述：
+访问 **http://localhost:5000**
 
-  用户可上传自己的书法作品，并按系统要求划分格子与录入信息。
-* 上传流程：
+## 项目结构
 
-  1. 上传作品图片；
-  2. 系统自动或用户手动划分格子（对应每个汉字）；**最好是自动划分，用户手动划分的是字属于哪个 风格，作者。因此不用实现风格识别**
-  3. 用户录入作品及字的信息（作者、风格、简介等）；
-  4. 作品提交后进入审核或直接展示区。
+```
+iCalligraphy/
+├── Backend/                # 后端代码
+│   ├── app.py             # 主应用（集成前后端）
+│   ├── config.py          # 配置文件
+│   ├── models.py          # 数据库模型
+│   ├── utils.py           # 工具函数
+│   ├── init_db.py         # 数据库初始化
+│   ├── requirements.txt   # Python 依赖
+│   ├── routes/            # API 路由
+│   │   ├── auth.py       # 认证
+│   │   ├── works.py      # 作品
+│   │   ├── users.py      # 用户
+│   │   ├── comments.py   # 评论
+│   │   └── collections.py # 收藏
+│   └── uploads/          # 上传文件
+├── Frontend-HTML/         # 前端代码
+│   ├── templates/        # HTML 模板
+│   └── static/           # 静态资源
+│       ├── css/
+│       ├── js/
+│       └── images/
+├── start.bat             # Windows 启动脚本
+└── start.sh              # Linux/Mac 启动脚本
+```
 
----
+## 路由说明
 
-### 4. 分类与检索功能
+### 前端页面
+- `/` - 首页
+- `/auth` - 登录/注册
+- `/profile` - 个人主页
+- `/search` - 搜索
+- `/community` - 社区
+- `/my-collections` - 我的收藏
+- `/work-upload` - 作品上传
+- `/work/<id>` - 作品详情
+- `/review-center` - 审核中心
 
-* 功能描述：
+### API 接口
+- `/api/auth/*` - 认证相关
+- `/api/works/*` - 作品管理
+- `/api/users/*` - 用户管理
+- `/api/comments/*` - 评论管理
+- `/api/collections/*` - 收藏管理
 
-  用户可在平台中按多种维度浏览与检索作品或单字。
-* 支持维度：
+详细 API 文档：[Backend/README.md](Backend/README.md)
 
-  * 作者
-  * 风格
-  * 作品名称
-  * 用户收藏字集
+## 开发说明
 
----
+### 数据模型
+- **User**：用户（用户名、邮箱、头像、简介）
+- **Work**：作品（标题、描述、图片、风格、审核状态）
+- **Comment**：评论（支持回复）
+- **Collection**：收藏
+- **Like**：点赞
 
-## 三、后续可拓展功能（看牢孔建议）
+### 认证机制
+使用 JWT Token 认证：
+1. 登录后获取 `access_token` 和 `refresh_token`
+2. 在请求头中添加：`Authorization: Bearer <access_token>`
+3. Token 过期后使用 `refresh_token` 刷新
 
-* 字形比对与临摹工具（对比原作与用户练习稿）
-* AI 自动识别字体风格与作者风格分析
-* 社区评论与作品打分系统
+### 文件上传
+- 支持格式：png, jpg, jpeg, gif, bmp
+- 最大大小：16MB
+- 上传目录：`Backend/uploads/`
 
-***社区交流，分享自己收藏的字集**
+## 常见问题
 
-## 四、当前技术栈（预设）
+### 1. 端口被占用
+修改 `Backend/app.py` 最后一行的端口号：
+```python
+app.run(host='0.0.0.0', port=5000, debug=True)
+```
 
-* 后端：Flask + SQLAlchemy
-* 数据库：SQLite
-* 前端：HTML + CSS + JavaScript
-* 图像处理：OpenCV
-* OCR：古籍酷、看典 API
-* AI模型：星火大模型（图像理解）
+### 2. 数据库重置
+删除 `Backend/icalligraphy.db` 文件，重新运行 `python init_db.py`
+
+### 3. 依赖安装失败
+尝试升级 pip：
+```bash
+pip install --upgrade pip
+pip install -r Backend/requirements.txt
+```
+
+## 测试
+
+使用 curl 或 Postman 测试 API：
+
+```bash
+# 注册
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","email":"test@example.com","password":"password123"}'
+
+# 登录
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+
+# 获取作品列表
+curl http://localhost:5000/api/works
+```
+
+## License
+
+MIT
